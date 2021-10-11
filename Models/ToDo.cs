@@ -13,6 +13,6 @@ namespace ToDoListeWeb.API.Models
         public int ToDoListId { get; set; }
 
         [JsonIgnore]
-        public virtual ToDoLists Todolist {get; set; }
+        public virtual ToDoLists TodoList {get; set; }
     }
 }
