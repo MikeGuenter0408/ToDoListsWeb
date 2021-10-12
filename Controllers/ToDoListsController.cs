@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListeWeb.API.Models;
 
@@ -29,9 +30,9 @@ namespace ToDoListeWeb.API.Controllers
         }
 
         [HttpGet, Route("{id:int}")]
-        public IActionResult GetToDoList(int id)
+        public async Task<IActionResult> GetToDoList(int id)
         {
-            var ToDoList = _context.ToDoLists.Find(id);
+            var ToDoList = await _context.ToDoLists.FindAsync(id);
             if(ToDoList == null)
             {
                 return NotFound();
