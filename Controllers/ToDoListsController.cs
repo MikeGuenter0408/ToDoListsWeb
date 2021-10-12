@@ -28,10 +28,14 @@ namespace ToDoListeWeb.API.Controllers
             return Ok(ToDos);
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet, Route("{id:int}")]
         public IActionResult GetToDoList(int id)
         {
             var ToDoList = _context.ToDoLists.Find(id);
+            if(ToDoList == null)
+            {
+                return NotFound();
+            }
             return Ok(ToDoList);
         }
     }
