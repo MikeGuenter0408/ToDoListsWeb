@@ -15,6 +15,8 @@ namespace ToDoListeWeb.API.Models
             .HasMany(c => c.ToDos)
             .WithOne(s => s.TodoList)
             .HasForeignKey(h => h.ToDoListId);
+
+            modelBuilder.Seed();
         }
         public DbSet<ToDoLists> ToDoLists {get; set;}
         public DbSet<ToDo> ToDos {get; set; }
