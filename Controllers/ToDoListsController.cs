@@ -15,15 +15,17 @@ namespace ToDoListeWeb.API.Controllers
             _context.Database.EnsureCreated();
         }
         [HttpGet]
-        public IEnumerable<ToDoLists> GetAllLists()
+        public IActionResult GetAllLists()
         {
-            return _context.ToDoLists;
+            var Lists = _context.ToDoLists;
+            return Ok(Lists);
         }
 
         [HttpGet("hello")]
-        public IEnumerable<ToDo> GetAllToDos()
+        public IActionResult GetAllToDos()
         {
-            return _context.ToDos;
+            var ToDos = _context.ToDos;
+            return Ok(ToDos);
         }
     }
 }
