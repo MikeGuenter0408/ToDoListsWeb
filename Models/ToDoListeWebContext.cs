@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ToDoListeWeb.API.Models
@@ -22,6 +18,5 @@ namespace ToDoListeWeb.API.Models
         }
         public DbSet<ToDoLists> ToDoLists {get; set;}
         public DbSet<ToDo> ToDos {get; set; }
-
     }
 }
