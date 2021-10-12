@@ -27,5 +27,12 @@ namespace ToDoListeWeb.API.Controllers
             var ToDos = _context.ToDos;
             return Ok(ToDos);
         }
+
+        [HttpGet, Route("{id}")]
+        public IActionResult GetToDoList(int id)
+        {
+            var ToDoList = _context.ToDoLists.Find(id);
+            return Ok(ToDoList);
+        }
     }
 }
