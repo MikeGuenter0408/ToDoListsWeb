@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListeWeb.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToDoListeWeb.API.Controllers
 {
@@ -16,19 +17,19 @@ namespace ToDoListeWeb.API.Controllers
             _context.Database.EnsureCreated();
         }
         [HttpGet]
-        public IActionResult GetAllLists()
+        public async Task<IActionResult> GetAllLists()
         {
-            var Lists = _context.ToDoLists;
-            if(Lists==null)
+            var Lists = await _context.ToDoLists.ToListAsync();
+            if(Lists == null)
                 return NotFound();
             return Ok(Lists);
         }
 
         [HttpGet("hello")]
-        public IActionResult GetAllToDos()
+        public async Task<IActionResult> GetAllToDos()
         {
-            var ToDos = _context.ToDos;
-            if(ToDos==null)
+            var ToDos = await _context.ToDos.ToListAsync();
+            if(ToDos == null)
                 return NotFound();
             return Ok(ToDos);
         }
