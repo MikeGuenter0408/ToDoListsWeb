@@ -75,12 +75,15 @@ namespace ToDoListeWeb.API.Controllers
                 {
                     if(typeof(ToDo).GetProperty(queryParameters.SortBy)!= null)
                     {
-                        ToDos = ToDos.OrderBy(s => s.)
+                        ToDos = ToDos.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
                     }
                 }
                 else
                 {
-                    ToDos = ToDos.OrderByDescending
+                    if(typeof(ToDo).GetProperty(queryParameters.SortBy)!= null)
+                    {
+                        ToDos = ToDos.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
+                    }
                 }
             }
 
