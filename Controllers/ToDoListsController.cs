@@ -19,6 +19,8 @@ namespace ToDoListeWeb.API.Controllers
         public IActionResult GetAllLists()
         {
             var Lists = _context.ToDoLists;
+            if(Lists==null)
+                return NotFound();
             return Ok(Lists);
         }
 
@@ -26,6 +28,8 @@ namespace ToDoListeWeb.API.Controllers
         public IActionResult GetAllToDos()
         {
             var ToDos = _context.ToDos;
+            if(ToDos==null)
+                return NotFound();
             return Ok(ToDos);
         }
 
@@ -34,9 +38,7 @@ namespace ToDoListeWeb.API.Controllers
         {
             var ToDoList = await _context.ToDoLists.FindAsync(id);
             if(ToDoList == null)
-            {
                 return NotFound();
-            }
             return Ok(ToDoList);
         }
     }
