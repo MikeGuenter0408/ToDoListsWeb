@@ -25,7 +25,7 @@ namespace ToDoListeWeb.API.Controllers
             return Ok(Lists);
         }
 
-        [HttpGet("hello")]
+        [HttpGet("ToDos")]
         public async Task<IActionResult> GetAllToDos()
         {
             var ToDos = await _context.ToDos.ToListAsync();
@@ -41,6 +41,15 @@ namespace ToDoListeWeb.API.Controllers
             if(ToDoList == null)
                 return NotFound();
             return Ok(ToDoList);
+        }
+
+        [HttpGet, Route("ToDos/{id:int}")]
+        public async Task<IActionResult> GetToDo(int id)
+        {
+            var ToDo = await _context.ToDos.FindAsync(id);
+            if(ToDo == null)
+                return NotFound();
+            return Ok(ToDo);
         }
     }
 }
