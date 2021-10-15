@@ -118,5 +118,34 @@ namespace ToDoListeWeb.API.Controllers
             }
             return Ok(ToDo);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PostToDoList([FromBody]ToDoLists list)
+        {
+            _context.Add(list);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetToDoList", list, list);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutToDoList([FromRoute] int id, [FromBody] ToDoLists list)
+        {
+            if(id != list.Id)
+                return BadRequest();
+            
+            _context.Entry(list).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }catch(DbUpdateConcurrencyException)
+            {
+                if(_context.ToDoLists.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
     }
 }
