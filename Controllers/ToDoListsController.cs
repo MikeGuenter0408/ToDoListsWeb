@@ -119,6 +119,17 @@ namespace ToDoListeWeb.API.Controllers
             return Ok(ToDo);
         }
 
+        // Post a new ToDo
+        [HttpPost("ToDos")]
+        public async Task<IActionResult> PostToDo([FromBody]ToDo toDo)
+        {
+            _context.Add(toDo);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetToDo", toDo, toDo);
+        }
+
+        // Post a new ToDoList
         [HttpPost]
         public async Task<IActionResult> PostToDoList([FromBody]ToDoLists list)
         {
@@ -131,10 +142,12 @@ namespace ToDoListeWeb.API.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutToDoList([FromRoute] int id, [FromBody] ToDoLists list)
         {
-            if(id != list.Id)
-                return BadRequest();
-            
-            _context.Entry(list).State = EntityState.Modified;
+            if(_context.ToDoLists.Find(id) == null)
+                return NotFound();
+
+            var toDoListToUpdate = _context.ToDoLists.Find(id);
+            toDoListToUpdate.Name = list.Name;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -147,5 +160,29 @@ namespace ToDoListeWeb.API.Controllers
             }
             return NoContent();
         }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutToDo([FromRoute] int id, [FromBody] ToDo toDo)
+        {
+            if(_context.ToDos.Find(id) == null)
+                return NotFound();
+                
+            var toDoToUpdate = _context.ToDos.Find(id);
+            toDoToUpdate.Description = toDo.Description;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }catch(DbUpdateConcurrencyException)
+            {
+                if(_context.ToDos.Find(id) == null)
+                    return NotFound();
+
+                throw;
+            }
+            return NoContent();
+        }
+
+        
     }
 }
