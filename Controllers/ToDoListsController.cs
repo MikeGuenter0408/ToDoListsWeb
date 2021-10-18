@@ -161,28 +161,51 @@ namespace ToDoListeWeb.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("ToDos/{id:int}")]
         public async Task<IActionResult> PutToDo([FromRoute] int id, [FromBody] ToDo toDo)
-        {
-            if(_context.ToDos.Find(id) == null)
-                return NotFound();
-                
+        { 
             var toDoToUpdate = _context.ToDos.Find(id);
+
+            if(toDoToUpdate == null)
+                return NotFound();
+
             toDoToUpdate.Description = toDo.Description;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }catch(DbUpdateConcurrencyException)
-            {
-                if(_context.ToDos.Find(id) == null)
-                    return NotFound();
-
-                throw;
-            }
+            await _context.SaveChangesAsync();
+            
             return NoContent();
         }
 
-        
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteToDoList([FromRoute] int id)
+        {
+            var list = await _context.ToDoLists.FindAsync(id);
+            
+            if(list == null)
+            {
+                return NotFound();
+            }
+            
+            _context.ToDoLists.Remove(list);
+            await _context.SaveChangesAsync();
+
+            return Ok(list);
+        }
+
+        [HttpDelete("/ToDos{id:int}")]
+        public async Task<IActionResult> DeleteToDo([FromRoute] int id)
+        {
+            var toDo = await _context.ToDos.FindAsync(id);
+            
+            if(toDo == null)
+            {
+                return NotFound();
+            }
+            
+            _context.ToDos.Remove(toDo);
+            await _context.SaveChangesAsync();
+
+            return Ok(toDo);
+        }
     }
 }
