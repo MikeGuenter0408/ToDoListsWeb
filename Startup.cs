@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.API.Models;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace ToDoListeWeb
 {
@@ -32,6 +33,8 @@ namespace ToDoListeWeb
                 options.ReportApiVersions = true;
                 options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
                 options.AssumeDefaultVersionWhenUnspecified = true;
+                //options.ApiVersionReader                             // --> For HTTP Versioning
+                //= new HeaderApiVersionReader("X-Api-Version");
             });
         }
 

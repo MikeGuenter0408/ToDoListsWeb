@@ -9,7 +9,8 @@ using System.Linq;
 namespace ToDoListeWeb.API.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("v{v:apiVersion}/ToDoLists")]
+    [Route("v{v:apiVersion}/ToDoLists")]        //  --> URL Versioning
+    //[Route("ToDoLists")]                      //  --> For Querystring and HTTP Versioning
     [ApiController]
     public class ToDoListsV1_Controller : ControllerBase
     {
@@ -53,8 +54,8 @@ namespace ToDoListeWeb.API.Controllers
             {
                 ToDos = ToDos
                 .Where(
-                    p => p.DateAndTime >= queryParameters.FromDate &&
-                         p.DateAndTime <= queryParameters.ToDate
+                    p => p.DueDateTime >= queryParameters.FromDate &&
+                         p.DueDateTime <= queryParameters.ToDate
                 );
             }
 
@@ -218,7 +219,8 @@ namespace ToDoListeWeb.API.Controllers
     // New Version ahead
 
     [ApiVersion("2.0")]
-    [Route("v{b:apiVersion}/ToDoLists")]
+    [Route("v{b:apiVersion}/ToDoLists")]      //--> URL Versioning
+    //[Route("ToDoLists")]                    //--> For Querystring and HTTP Versioning
     [ApiController]
     public class ToDoListsV2_Controller : ControllerBase
     {
@@ -262,8 +264,8 @@ namespace ToDoListeWeb.API.Controllers
             {
                 ToDos = ToDos
                 .Where(
-                    p => p.DateAndTime >= queryParameters.FromDate &&
-                         p.DateAndTime <= queryParameters.ToDate
+                    p => p.DueDateTime >= queryParameters.FromDate &&
+                         p.DueDateTime <= queryParameters.ToDate
                 );
             }
 
