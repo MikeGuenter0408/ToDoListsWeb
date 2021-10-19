@@ -28,6 +28,11 @@ namespace ToDoListeWeb
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoListeWeb", Version = "v1" });
             });
+            services.AddApiVersioning(options => {
+                options.ReportApiVersions = true;
+                options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
