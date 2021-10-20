@@ -70,6 +70,14 @@ namespace ToDoListeWeb.API.Controllers
                 );
             }
 
+            // Search for a ToDo by List-ID
+            if(queryParameters.ListId!=0){
+                ToDos = ToDos
+                .Where(
+                    p => p.ToDoListId.Equals(queryParameters.ListId)
+                );
+            }
+
             // Order ToDos
             if(queryParameters.SortBy!=null && queryParameters.SortOrder!=null)
             {
