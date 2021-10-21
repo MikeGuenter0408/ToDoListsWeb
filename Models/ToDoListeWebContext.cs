@@ -14,7 +14,16 @@ namespace ToDoListeWeb.API.Models
             modelBuilder.Entity<ToDoLists>()
             .HasMany(c => c.ToDos)
             .WithOne(s => s.TodoList)
-            .HasForeignKey(h => h.ToDoListId);
+            .HasForeignKey(h => h.ToDoListId)
+            .HasPrincipalKey(h => h.Id);
+
+            modelBuilder.Entity<ToDoLists>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ToDo>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
 
             modelBuilder.Seed();
         }

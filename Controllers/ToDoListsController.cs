@@ -25,7 +25,7 @@ namespace ToDoListeWeb.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            IQueryable<ToDoLists> Lists = _context.ToDoLists;
+            IQueryable<ToDoLists> Lists = _context.ToDoLists.Include(x => x.ToDos);
             if(Lists == null)
             {
                 return NotFound();
