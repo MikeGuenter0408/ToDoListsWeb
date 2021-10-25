@@ -18,7 +18,7 @@ namespace ToDoListeWeb.API.Classes
             } 
         }
         public string Name { get; set; }
-
+        public int Id { get; set; }
         public string SortBy { get; set; } = "Id";
         private string _sortOrder = "asc";
         public string SortOrder 

@@ -31,6 +31,14 @@ namespace ToDoListeWeb.API.Controllers
                 return NotFound();
             }
 
+            if(queryParameters.Id != 0)
+            {
+                Lists = Lists.Where(
+                p => p.Id == queryParameters.Id
+                );
+            }
+            
+
             Lists = Lists
             .Skip(queryParameters.SiteSize * (queryParameters.Page -1))
             .Take(queryParameters.SiteSize);
@@ -109,12 +117,12 @@ namespace ToDoListeWeb.API.Controllers
         [HttpGet, Route("{id:int}")]
         public async Task<IActionResult> GetToDoList(int id)
         {
-            var ToDoList = await _context.ToDoLists.FindAsync(id);
-            if(ToDoList == null)
+            var toDoList = await _context.ToDoLists.Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
+            if(toDoList == null)
             {
                 return NotFound();
             }
-            return Ok(ToDoList);
+            return Ok(toDoList);
         }
 
         // Get a specific ToDo by ID
