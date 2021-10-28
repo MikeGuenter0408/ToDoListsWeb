@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListeWeb.API.Models;
 using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.API.Classes;
 using System.Linq;
+using ToDoListeWeb.Domain.Entities;
 
 namespace ToDoListeWeb.API.Controllers
 {
