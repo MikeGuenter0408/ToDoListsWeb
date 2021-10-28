@@ -2,11 +2,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListeWeb.API.Models;
 using Microsoft.EntityFrameworkCore;
-using ToDoListeWeb.API.Classes;
 using System.Linq;
 using ToDoListeWeb.Domain.Entities;
+using ToDoListeWeb.Infrastructure.Repositories;
+using System.Collections.Generic;
+using ToDoListeWeb.Infrastructure.QueryParameters;
 
-namespace ToDoListeWeb.API.Controllers
+namespace ToDoListeWeb.Controller
 {
     [ApiVersion("1.0")]
     [Route("v{v:apiVersion}/ToDoLists")]        //  --> URL Versioning
@@ -15,6 +17,9 @@ namespace ToDoListeWeb.API.Controllers
     public class ToDoListsV1_Controller : ControllerBase
     {
         private readonly ToDoListeWebContext _context;
+        private ToDoRepo toDoRepo = new ToDoRepo();
+        private ToDoListRepo toDoListRepo = new ToDoListRepo();
+        
         public ToDoListsV1_Controller(ToDoListeWebContext context)
         {
             _context = context;
@@ -23,94 +28,27 @@ namespace ToDoListeWeb.API.Controllers
 
         // Get all ToDoLists
         [HttpGet]
-        public async Task<IActionResult> GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
+        public IActionResult GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            IQueryable<ToDoLists> Lists = _context.ToDoLists.Include(x => x.ToDos);
-            if(Lists == null)
-            {
+            var lists =  _context.ToDoLists.Include(x=>x.ToDos);
+             if(lists == null)
                 return NotFound();
-            }
 
-            if(queryParameters.Id != 0)
-            {
-                Lists = Lists.Where(
-                p => p.Id == queryParameters.Id
-                );
-            }
-            
-
-            Lists = Lists
-            .Skip(queryParameters.SiteSize * (queryParameters.Page -1))
-            .Take(queryParameters.SiteSize);
-
-            return Ok(await Lists.ToListAsync());
+             return Ok(toDoListRepo.FilterAndPageAllLists(_context, queryParameters));
         }
 
         // Get all ToDos (Search by ID, Filter and Order possible)
         [HttpGet("ToDos")]
         public async Task<IActionResult> GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
         {
-            IQueryable<ToDo> ToDos = _context.ToDos;
-            if(ToDos == null)
-            {
+            IQueryable<ToDo> toDos = _context.ToDos;
+
+            if(toDos == null)
                 return NotFound();
-            }
 
-            // Filter ToDos by time
-            if (queryParameters.FromDate!=null && 
-                queryParameters.ToDate!=null)
-            {
-                ToDos = ToDos
-                .Where(
-                    p => p.DueDateTime >= queryParameters.FromDate &&
-                         p.DueDateTime <= queryParameters.ToDate
-                );
-            }
+            toDoRepo.FilterAndPageAllToDos(toDos, queryParameters);
 
-            // Search for a ToDo
-            if(queryParameters.Name!=null)
-            {
-                ToDos = ToDos
-                .Where(
-                    p => p.Description.ToLower().Contains(
-                        queryParameters.Name.ToLower()
-                    )
-                );
-            }
-
-            // Search for a ToDo by List-ID
-            if(queryParameters.ListId!=0){
-                ToDos = ToDos
-                .Where(
-                    p => p.ToDoListId.Equals(queryParameters.ListId)
-                );
-            }
-
-            // Order ToDos
-            if(queryParameters.SortBy!=null && queryParameters.SortOrder!=null)
-            {
-                if(queryParameters.SortOrder == "asc")
-                {
-                    if(typeof(ToDo).GetProperty(queryParameters.SortBy)!= null)
-                    {
-                        ToDos = ToDos.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
-                    }
-                }
-                else
-                {
-                    if(typeof(ToDo).GetProperty(queryParameters.SortBy)!= null)
-                    {
-                        ToDos = ToDos.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
-                    }
-                }
-            }
-
-            // paginate ToDos
-            ToDos = ToDos
-            .Skip(queryParameters.SiteSize * (queryParameters.Page - 1))
-            .Take(queryParameters.SiteSize);
-
-            return Ok(await ToDos.ToListAsync());
+            return Ok(await toDos.ToListAsync());
         }
 
         // Get a specific ToDoList by ID
@@ -119,9 +57,8 @@ namespace ToDoListeWeb.API.Controllers
         {
             var toDoList = await _context.ToDoLists.Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
             if(toDoList == null)
-            {
                 return NotFound();
-            }
+
             return Ok(toDoList);
         }
 
@@ -131,9 +68,8 @@ namespace ToDoListeWeb.API.Controllers
         {
             var ToDo = await _context.ToDos.FindAsync(id);
             if(ToDo == null)
-            {
                 return NotFound();
-            }
+
             return Ok(ToDo);
         }
 
@@ -200,9 +136,7 @@ namespace ToDoListeWeb.API.Controllers
             var list = await _context.ToDoLists.FindAsync(id);
             
             if(list == null)
-            {
                 return NotFound();
-            }
             
             _context.ToDoLists.Remove(list);
             await _context.SaveChangesAsync();
@@ -216,9 +150,7 @@ namespace ToDoListeWeb.API.Controllers
             var toDo = await _context.ToDos.FindAsync(id);
             
             if(toDo == null)
-            {
                 return NotFound();
-            }
             
             _context.ToDos.Remove(toDo);
             await _context.SaveChangesAsync();
