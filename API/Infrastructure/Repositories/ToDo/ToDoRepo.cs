@@ -1,16 +1,17 @@
 using System.Linq;
 using ToDoListeWeb.Infrastructure.QueryParameters;
-using ToDoListeWeb.API.Models;
 using ToDoListeWeb.Domain.Entities;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using ToDoListeWeb.Infrastructure.Extensions;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
     class ToDoRepo
     {
-        public List<ToDo> FilterAndPageAllToDos(IQueryable<ToDo> toDos, ToDoQueryParameters queryParameters)
+        public List<ToDo> FilterAndPageAllToDos(ToDoListeWebContext context, ToDoQueryParameters queryParameters)
         {
+            IQueryable<ToDo> toDos = context.ToDos;
+
             // Filter ToDos by time
             if (queryParameters.FromDate!=null && 
                 queryParameters.ToDate!=null)

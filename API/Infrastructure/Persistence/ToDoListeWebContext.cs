@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.Domain.Entities;
+using ToDoListeWeb.Infrastructure.Extensions;
 
-namespace ToDoListeWeb.API.Models
+namespace ToDoListeWeb.Infrastructure
 {
     public class ToDoListeWebContext : DbContext
     {
         public ToDoListeWebContext(DbContextOptions<ToDoListeWebContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

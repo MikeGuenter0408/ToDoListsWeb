@@ -1,7 +1,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.Infrastructure.QueryParameters;
-using ToDoListeWeb.API.Models;
 using ToDoListeWeb.Domain.Entities;
 using System.Collections.Generic;
 

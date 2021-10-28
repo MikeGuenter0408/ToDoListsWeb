@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ToDoListeWeb.API.Models
+namespace ToDoListeWeb.Infrastructure.Extensions
 {
     public static class IQueryableExtensions
     {

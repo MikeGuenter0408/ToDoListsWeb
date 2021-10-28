@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.Domain.Entities;
 
-namespace ToDoListeWeb.API.Models
+namespace ToDoListeWeb.Infrastructure.Extensions
 {
     public static class ModelBuilderExtensions
     {
