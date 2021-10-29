@@ -1,12 +1,14 @@
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using ToDoListeWeb.Domain.Entities;
+using ToDoListeWeb.Infrastructure.Extensions;
 
-namespace ToDoListeWeb.API.Models
+namespace ToDoListeWeb.Infrastructure
 {
     public class ToDoListeWebContext : DbContext
     {
         public ToDoListeWebContext(DbContextOptions<ToDoListeWebContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,7 +29,17 @@ namespace ToDoListeWeb.API.Models
 
             modelBuilder.Seed();
         }
-        public DbSet<ToDoLists> ToDoLists {get; set;}
-        public DbSet<ToDo> ToDos {get; set; }
+        public DbSet<ToDoLists> ToDoLists;
+        public DbSet<ToDo> ToDos;
+
+        /*public void CreateTodo(ToDo toDo)
+        {
+            ToDos.Add(toDo);
+        }*/
+            
+        public IQueryable<ToDoLists> GetToDoLists()
+        {
+            return ToDoLists.AsQueryable();
+        }
     }
 }

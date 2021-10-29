@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace ToDoListeWeb.API.Models
+namespace ToDoListeWeb.Domain.Entities
 {
     public class ToDo
     {

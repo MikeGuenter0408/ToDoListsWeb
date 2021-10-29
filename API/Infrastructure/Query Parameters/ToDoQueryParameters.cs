@@ -1,6 +1,4 @@
-
-
-namespace ToDoListeWeb.API.Classes
+namespace ToDoListeWeb.Infrastructure.QueryParameters
 {
     public class ToDoQueryParameters : ToDoListQueryParameters
     {

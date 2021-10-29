@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
-namespace ToDoListeWeb.API.Models
+namespace ToDoListeWeb.Domain.Entities
 {
     public class ToDoLists
     {
