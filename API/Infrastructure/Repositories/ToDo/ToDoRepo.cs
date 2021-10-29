@@ -6,7 +6,7 @@ using ToDoListeWeb.Infrastructure.Extensions;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
-    class ToDoRepo
+    public class ToDoRepo
     {
         public List<ToDo> FilterAndPageAllToDos(ToDoListeWebContext context, ToDoQueryParameters queryParameters)
         {

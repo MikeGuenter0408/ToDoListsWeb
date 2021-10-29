@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
-    class ToDoListRepo
+    public class ToDoListRepo
     {
         public List<ToDoLists> FilterAndPageAllLists(ToDoListeWebContext context, ToDoListQueryParameters queryParameters)
         {
