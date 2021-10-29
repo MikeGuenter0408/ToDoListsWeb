@@ -7,21 +7,23 @@ using ToDoListeWeb.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using ToDoListeWeb.Infrastructure;
+using ToDoListeWeb.Infrastructure.QueryParameters;
 
 namespace ApiTests.UnitTests
 {
     public class ToDoListRepoTest
     {
-        //public IToDoListeWebContext context;
+        public IToDoListeWebContext context;
         private ToDoListRepo repo; 
         private List<ToDoLists> list;
         private Moq.Mock dbSet;
+        private ToDoListQueryParameters parameters;
 
         [SetUp]
         public void Setup()
         {
-           //context = Substitute.For<IToDoListeWebContext>();
-            repo = new ToDoListRepo();
+           context = Substitute.For<IToDoListeWebContext>();
+            repo = new ToDoListRepo(context);
             
             list = new List<ToDoLists>{new ToDoLists()
                 {
@@ -35,18 +37,24 @@ namespace ApiTests.UnitTests
                 }
             };
             var mockDbSet = GetQueryableMockDbSet(list);
-            //context.ToDoLists.Returns(mockDbSet);
+            context.ToDoLists.Returns(mockDbSet);
+
+            parameters = new ToDoListQueryParameters();
         }
 
         [Test]
-        public void Test1()
+        public void ShouldFilterAndPageAllLists()
         {
             //Arrange
-            Assert.That(true);
+            parameters.SortBy = "Name";
+            parameters.SiteSize = 1;
+            parameters.Page = 2;
 
             //Act
+            List<ToDoLists> listen = repo.FilterAndPageAllLists(parameters);
 
             //Assert
+            Assert.That(listen[0].Name == "Series");
         }
 
         private static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
