@@ -57,6 +57,22 @@ namespace ApiTests.UnitTests
             Assert.That(listen[0].Name == "Series");
         }
 
+        [Test]
+        public void ShouldGetASpecificList()
+        {
+            //Arrange
+            parameters.SortBy = "Name";
+            parameters.Id = 2;
+
+            //Act
+            List<ToDoLists> listen = repo.FilterAndPageSpecificList(parameters);
+
+            //Assert
+            Assert.That(listen[0].Name == "Series");
+        }
+
+        
+
         private static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
         {
             var queryableList = sourceList.AsQueryable();
