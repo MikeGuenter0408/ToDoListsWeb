@@ -16,7 +16,7 @@ namespace ToDoListeWeb.Controller
     public class ToDoListsV1_Controller : ControllerBase
     {
         private readonly ToDoListeWebContext _context;
-        private ToDoRepo toDoRepo = new ToDoRepo();
+        private ToDoRepo toDoRepo;
         private ToDoListRepo toDoListRepo;
         
         public ToDoListsV1_Controller(ToDoListeWebContext context)
@@ -24,40 +24,30 @@ namespace ToDoListeWeb.Controller
             _context = context;
             _context.Database.EnsureCreated();
             toDoListRepo = new ToDoListRepo(_context);
+            toDoRepo = new ToDoRepo(_context);
         }
 
         // Get all ToDoLists
         [HttpGet]
-        public IActionResult GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
+        public async Task<IActionResult> GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            var lists = toDoListRepo.FilterAndPageAllLists(queryParameters);
-
-             if(lists == null)
-                return NotFound();
-            
-
-             return Ok(lists);
+            var lists = await toDoListRepo.FilterAndPageAllLists(queryParameters);
+            return Ok(lists);
         }
 
         // Get all ToDos (Search by ID, Filter and Order possible)
         [HttpGet("ToDos")]
-        public IActionResult GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
+        public async Task<IActionResult> GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
         {
-            IQueryable<ToDo> toDos = _context.ToDos;
-            if(toDos == null)
-                return NotFound();
-
-            return Ok(toDoRepo.FilterAndPageAllToDos(_context, queryParameters));
+            var toDos = await toDoRepo.FilterAndPageAllToDos(queryParameters);
+            return Ok(toDos);
         }
 
         // Get a specific ToDoList by ID
         [HttpGet, Route("{id:int}")]
         public async Task<IActionResult> GetToDoList(int id)
         {
-            var toDoList = await _context.ToDoLists.Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
-            if(toDoList == null)
-                return NotFound();
-
+            var toDoList = await toDoListRepo.GetSpecificList(id);
             return Ok(toDoList);
         }
 
@@ -65,10 +55,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet, Route("ToDos/{id:int}")]
         public async Task<IActionResult> GetToDo(int id)
         {
-            var ToDo = await _context.ToDos.FindAsync(id);
-            if(ToDo == null)
-                return NotFound();
-
+            var ToDo = await toDoRepo.GetSpecificToDo(id);
             return Ok(ToDo);
         }
 
@@ -76,9 +63,7 @@ namespace ToDoListeWeb.Controller
         [HttpPost("ToDos")]
         public async Task<IActionResult> PostToDo([FromBody]ToDo toDo)
         {
-            _context.Add(toDo);
-            await _context.SaveChangesAsync();
-
+            await toDoRepo.PostToDo(toDo);
             return CreatedAtAction("GetToDo", toDo, toDo);
         }
 
@@ -86,74 +71,35 @@ namespace ToDoListeWeb.Controller
         [HttpPost]
         public async Task<IActionResult> PostToDoList([FromBody]ToDoLists list)
         {
-            _context.Add(list);
-            await _context.SaveChangesAsync();
-
+            await toDoListRepo.PostToDoList(list);
             return CreatedAtAction("GetToDoList", list, list);
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutToDoList([FromRoute] int id, [FromBody] ToDoLists list)
         {
-            if(_context.ToDoLists.Find(id) == null)
-                return NotFound();
-
-            var toDoListToUpdate = _context.ToDoLists.Find(id);
-            toDoListToUpdate.Name = list.Name;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }catch(DbUpdateConcurrencyException)
-            {
-                if(_context.ToDoLists.Find(id) == null)
-                    return NotFound();
-
-                throw;
-            }
+            await toDoListRepo.PutToDoList(id, list);
             return NoContent();
         }
 
         [HttpPut("ToDos/{id:int}")]
         public async Task<IActionResult> PutToDo([FromRoute] int id, [FromBody] ToDo toDo)
-        { 
-            var toDoToUpdate = _context.ToDos.Find(id);
-
-            if(toDoToUpdate == null)
-                return NotFound();
-
-            toDoToUpdate.Description = toDo.Description;
-
-            await _context.SaveChangesAsync();
-            
+        {
+            await toDoRepo.PutToDo(id, toDo);
             return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteToDoList([FromRoute] int id)
         {
-            var list = await _context.ToDoLists.FindAsync(id);
-            
-            if(list == null)
-                return NotFound();
-            
-            _context.ToDoLists.Remove(list);
-            await _context.SaveChangesAsync();
-
+            var list = await toDoListRepo.DeleteToDoList(id);
             return Ok(list);
         }
 
         [HttpDelete("ToDos/{id:int}")]
         public async Task<IActionResult> DeleteToDo([FromRoute] int id)
         {
-            var toDo = await _context.ToDos.FindAsync(id);
-            
-            if(toDo == null)
-                return NotFound();
-            
-            _context.ToDos.Remove(toDo);
-            await _context.SaveChangesAsync();
-
+            var toDo = await toDoRepo.DeleteToDo(id);
             return Ok(toDo);
         }
     }

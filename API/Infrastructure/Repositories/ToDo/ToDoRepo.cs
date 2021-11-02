@@ -3,12 +3,18 @@ using ToDoListeWeb.Infrastructure.QueryParameters;
 using ToDoListeWeb.Domain.Entities;
 using System.Collections.Generic;
 using ToDoListeWeb.Infrastructure.Extensions;
+using System.Threading.Tasks;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
     public class ToDoRepo
     {
-        public List<ToDo> FilterAndPageAllToDos(ToDoListeWebContext context, ToDoQueryParameters queryParameters)
+        private IToDoListeWebContext context; 
+        public ToDoRepo(IToDoListeWebContext context)
+        {
+            this.context = context;
+        }
+        public async Task<List<ToDo>> FilterAndPageAllToDos(ToDoQueryParameters queryParameters)
         {
             IQueryable<ToDo> toDos = context.ToDos;
 
@@ -67,6 +73,36 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             .Take(queryParameters.SiteSize);
 
             return toDos.ToList();
+        }
+
+        public async Task<ToDo> GetSpecificToDo(int id)
+        {
+            var toDos = await context.ToDos.FindAsync(id);
+            return toDos;
+        }
+
+        public async Task PostToDo(ToDo toDo)
+        {
+            context.Add(toDo);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task PutToDo(int id, ToDo toDo)
+        {
+            var toDoToUpdate = context.ToDos.Find(id);
+
+            toDoToUpdate.Description = toDo.Description;
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<ToDo> DeleteToDo(int id)
+        {
+            var toDo = await context.ToDos.FindAsync(id);
+            
+            context.ToDos.Remove(toDo);
+            await context.SaveChangesAsync();
+            return toDo;
         }
 
         

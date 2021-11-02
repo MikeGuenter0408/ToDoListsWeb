@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.Infrastructure.QueryParameters;
 using ToDoListeWeb.Domain.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
@@ -13,16 +14,13 @@ namespace ToDoListeWeb.Infrastructure.Repositories
         {
             this.context = context;
         }
-        public List<ToDoLists> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
+        public async Task<List<ToDoLists>> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
         {
             IQueryable<ToDoLists> lists = context.ToDoLists.Include(x => x.ToDos);
-
-            if(queryParameters.Id != 0)
-            {
-                lists = lists.Where(
-                p => p.Id == queryParameters.Id
-                );
-            }  
+            
+            if(queryParameters.Name!=null)
+                lists = lists
+                .Where(x=>x.Name.Equals(queryParameters.Name));
 
             lists = lists
             .Skip(queryParameters.SiteSize * (queryParameters.Page -1))
@@ -31,22 +29,34 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             return lists.ToList();
         }
 
-        public List<ToDoLists> FilterAndPageSpecificList(ToDoListQueryParameters queryParameters)
+        public async Task<ToDoLists> GetSpecificList(int id)
         {
-            IQueryable<ToDoLists> lists = context.ToDoLists.Include(x=>x.ToDos);
+            var lists = await context.ToDoLists.Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
+            return lists;
+        }
 
-            if(queryParameters.Id != 0)
-            {
-                lists = lists.Where(
-                p => p.Id == queryParameters.Id
-                );
-            }  
+        public async Task PostToDoList(ToDoLists list)
+        {
+            context.Add(list);
+            await context.SaveChangesAsync();
+        }
 
-            lists = lists
-            .Skip(queryParameters.SiteSize * (queryParameters.Page -1))
-            .Take(queryParameters.SiteSize);
+        public async Task PutToDoList(int id, ToDoLists list)
+        {
+            var toDoListToUpdate = context.ToDoLists.Find(id);
+            toDoListToUpdate.Name = list.Name;
+            
+            await context.SaveChangesAsync();
+        }
 
-            return lists.ToList();
+        public async Task<ToDoLists> DeleteToDoList(int id)
+        {
+            var list = await context.ToDoLists.FindAsync(id);
+            
+            context.ToDoLists.Remove(list);
+            await context.SaveChangesAsync();
+
+            return list;
         }
     }
 }
