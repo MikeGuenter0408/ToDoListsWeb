@@ -29,17 +29,17 @@ namespace ToDoListeWeb.Controller
 
         // Get all ToDoLists
         [HttpGet]
-        public async Task<IActionResult> GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
+        public IActionResult GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            var lists = await toDoListRepo.FilterAndPageAllLists(queryParameters);
+            var lists = toDoListRepo.FilterAndPageAllLists(queryParameters);
             return Ok(lists);
         }
 
         // Get all ToDos (Search by ID, Filter and Order possible)
         [HttpGet("ToDos")]
-        public async Task<IActionResult> GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
+        public IActionResult GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
         {
-            var toDos = await toDoRepo.FilterAndPageAllToDos(queryParameters);
+            var toDos = toDoRepo.FilterAndPageAllToDos(queryParameters);
             return Ok(toDos);
         }
 

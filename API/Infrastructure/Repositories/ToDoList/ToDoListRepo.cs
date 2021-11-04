@@ -14,7 +14,7 @@ namespace ToDoListeWeb.Infrastructure.Repositories
         {
             this.context = context;
         }
-        public async Task<List<ToDoLists>> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
+        public List<ToDoLists> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
         {
             IQueryable<ToDoLists> lists = context.ToDoLists.Include(x => x.ToDos);
             
@@ -31,7 +31,7 @@ namespace ToDoListeWeb.Infrastructure.Repositories
 
         public async Task<ToDoLists> GetSpecificList(int id)
         {
-            var lists = await context.ToDoLists.Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
+            var lists = await context.GetToDoLists().Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
             return lists;
         }
 

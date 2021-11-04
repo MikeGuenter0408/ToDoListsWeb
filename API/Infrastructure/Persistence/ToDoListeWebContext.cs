@@ -35,11 +35,11 @@ namespace ToDoListeWeb.Infrastructure
         /*public void CreateTodo(ToDo toDo)
         {
             ToDos.Add(toDo);
-        }
+        }*/
             
         public IQueryable<ToDoLists> GetToDoLists()
         {
             return ToDoLists.AsQueryable();
-        }*/
+        }
     }
 }

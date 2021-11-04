@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,5 +14,6 @@ namespace ToDoListeWeb.Infrastructure
         DbSet<ToDo> ToDos { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Add<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
+        IQueryable<ToDoLists> GetToDoLists();
     }
 }

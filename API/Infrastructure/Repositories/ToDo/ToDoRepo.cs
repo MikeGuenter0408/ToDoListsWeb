@@ -14,7 +14,7 @@ namespace ToDoListeWeb.Infrastructure.Repositories
         {
             this.context = context;
         }
-        public async Task<List<ToDo>> FilterAndPageAllToDos(ToDoQueryParameters queryParameters)
+        public List<ToDo> FilterAndPageAllToDos(ToDoQueryParameters queryParameters)
         {
             IQueryable<ToDo> toDos = context.ToDos;
 

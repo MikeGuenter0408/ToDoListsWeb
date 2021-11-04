@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ToDoListeWeb.Infrastructure;
 using ToDoListeWeb.Infrastructure.QueryParameters;
+using MockQueryable.Moq;
+using MockQueryable.EntityFrameworkCore;
+using Moq;
 
 namespace ApiTests.UnitTests
 {
@@ -51,24 +54,25 @@ namespace ApiTests.UnitTests
             parameters.Page = 2;
 
             //Act
-            List<ToDoLists> listen = repo.FilterAndPageAllLists(parameters);
+            var listen = repo.FilterAndPageAllLists(parameters);
+            var listenAsList = listen.ToList();
 
             //Assert
             Assert.That(listen[0].Name == "Series");
         }
 
         [Test]
-        public void ShouldGetASpecificList()
+        public async Task ShouldGetASpecificList()
         {
             //Arrange
             parameters.SortBy = "Name";
             parameters.Id = 2;
 
             //Act
-            List<ToDoLists> listen = repo.FilterAndPageSpecificList(parameters);
+            var listen = await repo.GetSpecificList(parameters.Id);
 
             //Assert
-            Assert.That(listen[0].Name == "Series");
+            Assert.That(listen.Name == "Series");
         }
 
         
