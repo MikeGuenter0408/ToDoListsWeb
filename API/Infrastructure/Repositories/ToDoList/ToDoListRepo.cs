@@ -31,8 +31,8 @@ namespace ToDoListeWeb.Infrastructure.Repositories
 
         public async Task<ToDoLists> GetSpecificList(int id)
         {
-            var lists = await context.GetToDoLists().Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
-            return lists;
+            var lists = context.GetToDoLists().Include(x=>x.ToDos);
+            return  await lists.SingleOrDefaultAsync(x=>x.Id==id);
         }
 
         public async Task PostToDoList(ToDoLists list)
