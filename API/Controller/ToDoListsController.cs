@@ -1,11 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using ToDoListeWeb.Domain.Entities;
 using ToDoListeWeb.Infrastructure.Repositories;
 using ToDoListeWeb.Infrastructure.QueryParameters;
-using ToDoListeWeb.Infrastructure;
+using ToDoListWeb.Infrastructure;
 
 namespace ToDoListeWeb.Controller
 {
@@ -15,11 +13,11 @@ namespace ToDoListeWeb.Controller
     [ApiController]
     public class ToDoListsV1_Controller : ControllerBase
     {
-        private readonly ToDoListeWebContext _context;
+        private readonly ToDoListWebContext _context;
         private ToDoRepo toDoRepo;
         private ToDoListRepo toDoListRepo;
         
-        public ToDoListsV1_Controller(ToDoListeWebContext context)
+        public ToDoListsV1_Controller(ToDoListWebContext context)
         {
             _context = context;
             _context.Database.EnsureCreated();

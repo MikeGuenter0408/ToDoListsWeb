@@ -4,13 +4,14 @@ using ToDoListeWeb.Infrastructure.QueryParameters;
 using ToDoListeWeb.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ToDoListWeb.Infrastructure;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
     public class ToDoListRepo
     {
-        private IToDoListeWebContext context; 
-        public ToDoListRepo(IToDoListeWebContext context)
+        private IToDoListWebContext context; 
+        public ToDoListRepo(IToDoListWebContext context)
         {
             this.context = context;
         }
