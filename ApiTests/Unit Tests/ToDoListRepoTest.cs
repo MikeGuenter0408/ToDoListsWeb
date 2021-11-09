@@ -6,28 +6,24 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using NUnit.Framework;
 using ToDoListeWeb.Domain.Entities;
-using ToDoListeWeb.Infrastructure;
 using ToDoListeWeb.Infrastructure.QueryParameters;
 using ToDoListeWeb.Infrastructure.Repositories;
+using ToDoListWeb.Infrastructure;
 
 namespace ApiTests.UnitTests
 {
     public class ToDoListRepoTest
     {
-        private IToDoListeWebContext context;
+        private IToDoListWebContext context;
         private ToDoListRepo repo; 
-        private List<ToDoLists> list;
+        private List<ToDoList> list;
         private Moq.Mock dbSet;
-        //ToDo parameter sollte nicht global in der Klasse sein
-        //Tests überschreiben sich gegenseitig den Wert des Parameters
-        //Kann zu unterschiedlichem  Verhalten führen, je nachdem in welcher Reihenfolge die Tests ausgeführt werden
         private ToDoListQueryParameters parameters;
 
         [SetUp]
         public void Setup()
         {
-            //ToDo: Englische Bezeichnung für ToDoList benutzen. Bezeichnung der Entity konstant halten. Hier IToDoListeWebContext
-            context = Substitute.For<IToDoListeWebContext>();
+            context = Substitute.For<IToDoListWebContext>();
             repo = new ToDoListRepo(context);
             parameters = new ToDoQueryParameters();
         }
@@ -40,17 +36,14 @@ namespace ApiTests.UnitTests
             parameters.SiteSize = 1;
             parameters.Page = 2;
 
-            var toDoListAsDbSet = CreateToDoList().AsQueryable().BuildMockDbSet();
+            var toDoListAsDbSet = CreateToDoLists().AsQueryable().BuildMockDbSet();
             context.ToDoLists.Returns(toDoListAsDbSet);
             
             //Act
-            //ToDo Englische Variablennamen
-            var listen = repo.FilterAndPageAllLists(parameters);
-            //ToDo: Erneutes ToList() nicht nötig. Return Wert ist schon vom Typ List<ToDoLists>
-            var listenAsList = listen.ToList();
+            var lists = repo.FilterAndPageAllLists(parameters);
         
             //Assert
-            Assert.That(listen[0].Name == "Series");
+            Assert.That(lists[0].Name == "Series");
         }
 
         
@@ -61,7 +54,7 @@ namespace ApiTests.UnitTests
             //Arrange
             parameters.SortBy = "Name";
             parameters.Id = 2;
-            var listAsQueryAble = CreateToDoList().AsQueryable()
+            var listAsQueryAble = CreateToDoLists().AsQueryable()
                 .BuildMock();
 
             context.GetToDoLists().Returns(listAsQueryAble);
@@ -71,13 +64,28 @@ namespace ApiTests.UnitTests
 
             //Assert
             Assert.That(list.Name == "Series");
+            Assert.That(list.ToDos[0].Description=="dummy");
         }
 
-        private static List<ToDoLists> CreateToDoList()
+        [Test]
+        public async Task ShouldAddToDoList()
         {
-            return new List<ToDoLists>
+            //Arrange
+            var lists = CreateToDoLists();
+            var list = lists[0];
+
+            //Act
+            await repo.PostToDoList(list);
+
+            //Assert
+            context.Received(1).Add(Arg.Is(list));
+        }
+
+        private static List<ToDoList> CreateToDoLists()
+        {
+            return new List<ToDoList>
             {
-                new ToDoLists()
+                new ToDoList()
                 {
                     Name = "Shopping",
                     Id = 1,
@@ -90,7 +98,7 @@ namespace ApiTests.UnitTests
                         }
                     }
                 },
-                new ToDoLists()
+                new ToDoList()
                 {
                     Name = "Series",
                     Id = 2,
