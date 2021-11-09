@@ -67,7 +67,6 @@ namespace ApiTests.UnitTests
             //Assert
             await context.Received(2).ToDos.FindAsync(id);
             Assert.That(toDo.Id==1&&toDo.Description=="dummy1");
-
         }
 
         [Test]
@@ -100,28 +99,31 @@ namespace ApiTests.UnitTests
             await repo.PutToDo(id, toDoToPut);
 
             //Assert
-            context.Received(2).ToDos.Find(id);
+            context.ToDos.Received(1).Find(id);
             await context.Received(1).SaveChangesAsync();
         }
-/*
+
         [Test]
-        public async Task ShouldDeleteToDoList()
+        public async Task ShouldDeleteToDo()
         {
             //Arrange
-            var lists = CreateToDoLists();
             int id = 1;
-            var listUp = lists[0];
-            context.ToDoLists.Find(id).Returns(listUp);
+            var toDosLists = CreateToDoLists();
+            List<ToDo> toDo = new List<ToDo>();
+            toDo.Add(toDosLists[0].ToDos[0]); 
+            toDo.Add(toDosLists[1].ToDos[0]); 
+
+            context.ToDos.FindAsync(id).Returns(toDosLists[0].ToDos[0]);
 
             //Act
-            await repo.DeleteToDoList(id);
+            await repo.DeleteToDo(id);
 
             //Assert
-            context.Received(2).ToDoLists.Find(id);
-            context.Received(1).ToDoLists.Remove(listUp);
+            await context.ToDos.Received(1).FindAsync(id);
+            context.ToDos.Received(1).Remove(toDosLists[0].ToDos[0]);
             await context.Received(1).SaveChangesAsync();
         }
-*/
+
         private static List<ToDoList> CreateToDoLists()
         {
             return new List<ToDoList>

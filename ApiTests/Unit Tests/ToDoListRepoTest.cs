@@ -107,15 +107,14 @@ namespace ApiTests.UnitTests
             //Arrange
             var lists = CreateToDoLists();
             int id = 1;
-            var listUp = lists[0];
-            context.ToDoLists.Find(id).Returns(listUp);
+            var listToDelete = lists[0];
+            context.ToDoLists.FindAsync(id).Returns(listToDelete);
 
             //Act
             await repo.DeleteToDoList(id);
 
             //Assert
-            context.Received(2).ToDoLists.Find(id);
-            context.Received(1).ToDoLists.Remove(listUp);
+            context.ToDoLists.Received(1).Remove(listToDelete);
             await context.Received(1).SaveChangesAsync();
         }
 
