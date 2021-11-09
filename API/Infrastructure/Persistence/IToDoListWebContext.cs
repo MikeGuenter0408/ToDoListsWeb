@@ -10,10 +10,10 @@ namespace ToDoListWeb.Infrastructure
 {
     public interface IToDoListWebContext
     {
-        DbSet<ToDoLists> ToDoLists { get; set; }
+        DbSet<ToDoList> ToDoLists { get; set; }
         DbSet<ToDo> ToDos { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Add<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
-        IQueryable<ToDoLists> GetToDoLists();
+        IQueryable<ToDoList> GetToDoLists();
     }
 }

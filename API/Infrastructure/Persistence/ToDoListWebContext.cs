@@ -13,13 +13,13 @@ namespace ToDoListWeb.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ToDoLists>()
+            modelBuilder.Entity<ToDoList>()
             .HasMany(c => c.ToDos)
             .WithOne(s => s.TodoList)
             .HasForeignKey(h => h.ToDoListId)
             .HasPrincipalKey(h => h.Id);
 
-            modelBuilder.Entity<ToDoLists>()
+            modelBuilder.Entity<ToDoList>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
@@ -29,7 +29,7 @@ namespace ToDoListWeb.Infrastructure
 
             modelBuilder.Seed();
         }
-        public DbSet<ToDoLists> ToDoLists {set; get;}
+        public DbSet<ToDoList> ToDoLists {set; get;}
         public DbSet<ToDo> ToDos {set; get;}
 
         /*public void CreateTodo(ToDo toDo)
@@ -37,7 +37,7 @@ namespace ToDoListWeb.Infrastructure
             ToDos.Add(toDo);
         }*/
             
-        public IQueryable<ToDoLists> GetToDoLists()
+        public IQueryable<ToDoList> GetToDoLists()
         {
             return ToDoLists.AsQueryable();
         }

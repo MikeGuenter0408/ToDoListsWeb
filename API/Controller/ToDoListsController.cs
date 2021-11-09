@@ -67,14 +67,14 @@ namespace ToDoListeWeb.Controller
 
         // Post a new ToDoList
         [HttpPost]
-        public async Task<IActionResult> PostToDoList([FromBody]ToDoLists list)
+        public async Task<IActionResult> PostToDoList([FromBody]ToDoList list)
         {
             await toDoListRepo.PostToDoList(list);
             return CreatedAtAction("GetToDoList", list, list);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutToDoList([FromRoute] int id, [FromBody] ToDoLists list)
+        public async Task<IActionResult> PutToDoList([FromRoute] int id, [FromBody] ToDoList list)
         {
             await toDoListRepo.PutToDoList(id, list);
             return NoContent();

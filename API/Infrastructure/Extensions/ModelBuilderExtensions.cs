@@ -7,12 +7,12 @@ namespace ToDoListeWeb.Infrastructure.Extensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ToDoLists>().HasData(
-                new ToDoLists { Id = 1, Name = "Shopping"},
-                new ToDoLists { Id = 2, Name = "Watching Series"},
-                new ToDoLists { Id = 3, Name = "Playing Games"},
-                new ToDoLists { Id = 4, Name = "Workout"},
-                new ToDoLists { Id = 5, Name = "Studying"});
+            modelBuilder.Entity<ToDoList>().HasData(
+                new ToDoList { Id = 1, Name = "Shopping"},
+                new ToDoList { Id = 2, Name = "Watching Series"},
+                new ToDoList { Id = 3, Name = "Playing Games"},
+                new ToDoList { Id = 4, Name = "Workout"},
+                new ToDoList { Id = 5, Name = "Studying"});
             
             modelBuilder.Entity<ToDo>().HasData(
                 new ToDo {Id = 1,   ToDoListId = 1, Description = "Cabbage",        DueDateTime = new System.DateTime()},

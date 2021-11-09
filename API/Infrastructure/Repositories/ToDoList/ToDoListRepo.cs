@@ -15,9 +15,9 @@ namespace ToDoListeWeb.Infrastructure.Repositories
         {
             this.context = context;
         }
-        public List<ToDoLists> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
+        public List<ToDoList> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
         {
-            IQueryable<ToDoLists> lists = context.ToDoLists.Include(x => x.ToDos);
+            IQueryable<ToDoList> lists = context.ToDoLists.Include(x => x.ToDos);
             
             if(queryParameters.Name!=null)
                 lists = lists
@@ -30,19 +30,19 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             return lists.ToList();
         }
 
-        public async Task<ToDoLists> GetSpecificList(int id)
+        public async Task<ToDoList> GetSpecificList(int id)
         {
             var lists = await context.GetToDoLists().Include(x=>x.ToDos).SingleOrDefaultAsync(x=>x.Id==id);
             return lists;
         }
 
-        public async Task PostToDoList(ToDoLists list)
+        public async Task PostToDoList(ToDoList list)
         {
             context.Add(list);
             await context.SaveChangesAsync();
         }
 
-        public async Task PutToDoList(int id, ToDoLists list)
+        public async Task PutToDoList(int id, ToDoList list)
         {
             var toDoListToUpdate = context.ToDoLists.Find(id);
             toDoListToUpdate.Name = list.Name;
@@ -50,7 +50,7 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<ToDoLists> DeleteToDoList(int id)
+        public async Task<ToDoList> DeleteToDoList(int id)
         {
             var list = await context.ToDoLists.FindAsync(id);
             
