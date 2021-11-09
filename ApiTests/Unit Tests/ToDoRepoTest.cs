@@ -49,27 +49,27 @@ namespace ApiTests.UnitTests
             Assert.That(filteredToDos[0].Description == "dummy2");
         }
 
-        /*
+        
         
         [Test]
-        public async Task ShouldGetASpecificList()
+        public async Task ShouldGetASpecificToDo()
         {
             //Arrange
-            parameters.SortBy = "Name";
-            parameters.Id = 2;
-            var listAsQueryAble = CreateToDoLists().AsQueryable()
-                .BuildMock();
+            int id = 1;
+            var toDosLists = CreateToDoLists();
+            ToDo toDoMock = toDosLists[0].ToDos[0];
 
-            context.GetToDoLists().Returns(listAsQueryAble);
+            context.ToDos.FindAsync(id).Returns(toDoMock);
 
             //Act
-            var list = await repo.GetSpecificList(parameters.Id);
+            ToDo toDo = await repo.GetSpecificToDo(id);
 
             //Assert
-            Assert.That(list.Name == "Series");
-            Assert.That(list.ToDos[0].Description=="dummy");
-        }
+            await context.Received(2).ToDos.FindAsync(id);
+            Assert.That(toDo.Id==1&&toDo.Description=="dummy1");
 
+        }
+/*
         [Test]
         public async Task ShouldAddToDoList()
         {
