@@ -12,41 +12,44 @@ using ToDoListWeb.Infrastructure;
 
 namespace ApiTests.UnitTests
 {
-    public class ToDoListRepoTest
+    public class ToDoRepoTest
     {
         private IToDoListWebContext context;
-        private ToDoListRepo repo; 
+        private ToDoRepo repo; 
         private List<ToDoList> list;
         private Moq.Mock dbSet;
-        private ToDoListQueryParameters parameters;
+        private ToDoQueryParameters parameters;
 
         [SetUp]
         public void Setup()
         {
             context = Substitute.For<IToDoListWebContext>();
-            repo = new ToDoListRepo(context);
+            repo = new ToDoRepo(context);
             parameters = new ToDoQueryParameters();
         }
 
         [Test]
-        public void ShouldFilterAndPageAllLists()
+        public void ShouldFilterAndPageAllToDos()
         {
             //Arrange
-            parameters.SortBy = "Name";
+            parameters.SortBy = "Description";
             parameters.SiteSize = 1;
             parameters.Page = 2;
 
-            var toDoListAsDbSet = CreateToDoLists().AsQueryable().BuildMockDbSet();
-            context.ToDoLists.Returns(toDoListAsDbSet);
+            var toDosLists = CreateToDoLists();
+            List<ToDo> toDos = new List<ToDo>();
+            toDos.Add(toDosLists[0].ToDos[0]); toDos.Add(toDosLists[1].ToDos[0]); 
+            var toDosAsDb = toDos.AsQueryable().BuildMockDbSet();
+            context.ToDos.Returns(toDosAsDb);
             
             //Act
-            var lists = repo.FilterAndPageAllLists(parameters);
+            var filteredToDos = repo.FilterAndPageAllToDos(parameters);
         
             //Assert
-            Assert.That(lists[0].Name == "Series");
+            Assert.That(filteredToDos[0].Description == "dummy2");
         }
 
-        
+        /*
         
         [Test]
         public async Task ShouldGetASpecificList()
@@ -118,7 +121,7 @@ namespace ApiTests.UnitTests
             context.Received(1).ToDoLists.Remove(listUp);
             await context.Received(1).SaveChangesAsync();
         }
-
+*/
         private static List<ToDoList> CreateToDoLists()
         {
             return new List<ToDoList>
@@ -131,7 +134,7 @@ namespace ApiTests.UnitTests
                     {
                         new ToDo
                         {
-                            Description = "dummy",
+                            Description = "dummy1",
                             Id = 1
                         }
                     }
@@ -144,7 +147,7 @@ namespace ApiTests.UnitTests
                     {
                         new ToDo
                         {
-                            Description = "dummy",
+                            Description = "dummy2",
                             Id = 2
                         }
                     }
