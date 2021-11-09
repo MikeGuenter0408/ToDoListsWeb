@@ -69,22 +69,22 @@ namespace ApiTests.UnitTests
             Assert.That(toDo.Id==1&&toDo.Description=="dummy1");
 
         }
-/*
+
         [Test]
-        public async Task ShouldAddToDoList()
+        public async Task ShouldAddToDo()
         {
             //Arrange
-            var lists = CreateToDoLists();
-            var list = lists[0];
+            var toDosLists = CreateToDoLists();
+            ToDo toDoMock = toDosLists[0].ToDos[0];
 
             //Act
-            await repo.PostToDoList(list);
+            await repo.PostToDo(toDoMock);
 
             //Assert
-            context.Received(1).Add(Arg.Is(list));
+            context.Received(1).Add(Arg.Is(toDoMock));
             await context.Received(1).SaveChangesAsync();
         }
-
+/*
         [Test]
         public async Task ShouldPutToDoList()
         {
