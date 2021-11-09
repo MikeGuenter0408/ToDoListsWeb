@@ -79,6 +79,44 @@ namespace ApiTests.UnitTests
 
             //Assert
             context.Received(1).Add(Arg.Is(list));
+            await context.Received(1).SaveChangesAsync();
+        }
+
+        [Test]
+        public async Task ShouldPutToDoList()
+        {
+            //Arrange
+            var lists = CreateToDoLists();
+            int id = 1;
+            var listUp = lists[0];
+            var listToPut = lists[0];
+            listToPut.ToDos[0].Description = "Put";
+            context.ToDoLists.Find(id).Returns(listUp);
+
+            //Act
+            await repo.PutToDoList(id, listToPut);
+
+            //Assert
+            context.Received(2).ToDoLists.Find(id); 
+            await context.Received(1).SaveChangesAsync();
+        }
+
+        [Test]
+        public async Task ShouldDeleteToDoList()
+        {
+            //Arrange
+            var lists = CreateToDoLists();
+            int id = 1;
+            var listUp = lists[0];
+            context.ToDoLists.Find(id).Returns(listUp);
+
+            //Act
+            await repo.DeleteToDoList(id);
+
+            //Assert
+            context.Received(2).ToDoLists.Find(id);
+            context.Received(1).ToDoLists.Remove(listUp);
+            await context.Received(1).SaveChangesAsync();
         }
 
         private static List<ToDoList> CreateToDoLists()
