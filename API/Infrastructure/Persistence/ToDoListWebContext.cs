@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.Domain.Entities;
 using ToDoListeWeb.Infrastructure.Extensions;
 
-namespace ToDoListeWeb.Infrastructure
+namespace ToDoListWeb.Infrastructure
 {
-    public class ToDoListeWebContext : DbContext, IToDoListeWebContext
+    public class ToDoListWebContext : DbContext, IToDoListWebContext
     {
-        public ToDoListeWebContext(DbContextOptions<ToDoListeWebContext> options) : base(options)  
+        public ToDoListWebContext(DbContextOptions<ToDoListWebContext> options) : base(options)  
         {
         }
 
