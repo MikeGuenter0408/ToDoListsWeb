@@ -8,7 +8,12 @@ namespace ToDoListeWeb.Infrastructure.Repositories
 {
     public class ToDoListRepo
     {
-        public List<ToDoLists> FilterAndPageAllLists(ToDoListeWebContext context, ToDoListQueryParameters queryParameters)
+        private IToDoListeWebContext context; 
+        public ToDoListRepo(IToDoListeWebContext context)
+        {
+            this.context = context;
+        }
+        public List<ToDoLists> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
         {
             IQueryable<ToDoLists> lists = context.ToDoLists.Include(x => x.ToDos);
 
@@ -26,8 +31,10 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             return lists.ToList();
         }
 
-        public List<ToDoLists> FilterAndPageSpecificList(IQueryable<ToDoLists> lists, ToDoListQueryParameters queryParameters)
+        public List<ToDoLists> FilterAndPageSpecificList(ToDoListQueryParameters queryParameters)
         {
+            IQueryable<ToDoLists> lists = context.ToDoLists.Include(x=>x.ToDos);
+
             if(queryParameters.Id != 0)
             {
                 lists = lists.Where(

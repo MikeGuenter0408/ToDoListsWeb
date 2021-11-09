@@ -17,23 +17,26 @@ namespace ToDoListeWeb.Controller
     {
         private readonly ToDoListeWebContext _context;
         private ToDoRepo toDoRepo = new ToDoRepo();
-        private ToDoListRepo toDoListRepo = new ToDoListRepo();
+        private ToDoListRepo toDoListRepo;
         
         public ToDoListsV1_Controller(ToDoListeWebContext context)
         {
             _context = context;
             _context.Database.EnsureCreated();
+            toDoListRepo = new ToDoListRepo(_context);
         }
 
         // Get all ToDoLists
         [HttpGet]
         public IActionResult GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            var lists =  _context.ToDoLists.Include(x=>x.ToDos);
+            var lists = toDoListRepo.FilterAndPageAllLists(queryParameters);
+
              if(lists == null)
                 return NotFound();
+            
 
-             return Ok(toDoListRepo.FilterAndPageAllLists(_context, queryParameters));
+             return Ok(lists);
         }
 
         // Get all ToDos (Search by ID, Filter and Order possible)

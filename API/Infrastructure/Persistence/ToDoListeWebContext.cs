@@ -5,9 +5,9 @@ using ToDoListeWeb.Infrastructure.Extensions;
 
 namespace ToDoListeWeb.Infrastructure
 {
-    public class ToDoListeWebContext : DbContext
+    public class ToDoListeWebContext : DbContext, IToDoListeWebContext
     {
-        public ToDoListeWebContext(DbContextOptions<ToDoListeWebContext> options) : base(options)
+        public ToDoListeWebContext(DbContextOptions<ToDoListeWebContext> options) : base(options)  
         {
         }
 
@@ -29,17 +29,17 @@ namespace ToDoListeWeb.Infrastructure
 
             modelBuilder.Seed();
         }
-        public DbSet<ToDoLists> ToDoLists;
-        public DbSet<ToDo> ToDos;
+        public DbSet<ToDoLists> ToDoLists {set; get;}
+        public DbSet<ToDo> ToDos {set; get;}
 
         /*public void CreateTodo(ToDo toDo)
         {
             ToDos.Add(toDo);
-        }*/
+        }
             
         public IQueryable<ToDoLists> GetToDoLists()
         {
             return ToDoLists.AsQueryable();
-        }
+        }*/
     }
 }
