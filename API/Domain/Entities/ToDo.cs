@@ -11,6 +11,6 @@ namespace ToDoListeWeb.Domain.Entities
         public int ToDoListId { get; set; }
 
         [JsonIgnore]
-        public virtual ToDoLists TodoList {get; set; }
+        public virtual ToDoList TodoList {get; set; }
     }
 }

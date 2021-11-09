@@ -3,23 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using ToDoListeWeb.Domain.Entities;
 using ToDoListeWeb.Infrastructure.Extensions;
 
-namespace ToDoListeWeb.Infrastructure
+namespace ToDoListWeb.Infrastructure
 {
-    public class ToDoListeWebContext : DbContext, IToDoListeWebContext
+    public class ToDoListWebContext : DbContext, IToDoListWebContext
     {
-        public ToDoListeWebContext(DbContextOptions<ToDoListeWebContext> options) : base(options)  
+        public ToDoListWebContext(DbContextOptions<ToDoListWebContext> options) : base(options)  
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ToDoLists>()
+            modelBuilder.Entity<ToDoList>()
             .HasMany(c => c.ToDos)
             .WithOne(s => s.TodoList)
             .HasForeignKey(h => h.ToDoListId)
             .HasPrincipalKey(h => h.Id);
 
-            modelBuilder.Entity<ToDoLists>()
+            modelBuilder.Entity<ToDoList>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
@@ -29,17 +29,17 @@ namespace ToDoListeWeb.Infrastructure
 
             modelBuilder.Seed();
         }
-        public DbSet<ToDoLists> ToDoLists {set; get;}
+        public DbSet<ToDoList> ToDoLists {set; get;}
         public DbSet<ToDo> ToDos {set; get;}
 
         /*public void CreateTodo(ToDo toDo)
         {
             ToDos.Add(toDo);
-        }
+        }*/
             
-        public IQueryable<ToDoLists> GetToDoLists()
+        public IQueryable<ToDoList> GetToDoLists()
         {
             return ToDoLists.AsQueryable();
-        }*/
+        }
     }
 }
