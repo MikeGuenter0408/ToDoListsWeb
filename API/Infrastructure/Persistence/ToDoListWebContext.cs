@@ -31,11 +31,6 @@ namespace ToDoListWeb.Infrastructure
         }
         public DbSet<ToDoList> ToDoLists {set; get;}
         public DbSet<ToDo> ToDos {set; get;}
-
-        /*public void CreateTodo(ToDo toDo)
-        {
-            ToDos.Add(toDo);
-        }*/
             
         public IQueryable<ToDoList> GetToDoLists()
         {
