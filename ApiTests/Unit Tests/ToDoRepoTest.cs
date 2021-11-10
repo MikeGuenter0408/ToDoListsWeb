@@ -44,7 +44,8 @@ namespace ApiTests.UnitTests
             var filteredToDos = repo.FilterAndPageAllToDos(parameters);
         
             //Assert
-            Assert.That(filteredToDos[0].Description == "dummy2");
+            Assert.That(filteredToDos.Count, Is.EqualTo(1));
+            Assert.That(filteredToDos[0].Description, Is.EqualTo("dummy2"));
         }
 
         
