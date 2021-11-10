@@ -47,7 +47,7 @@ namespace ApiTests.UnitTests
         }
 
         
-        //ToDo prüfe ob die Todos mit geladen wurden
+        
         [Test]
         public async Task ShouldGetASpecificList()
         {
@@ -71,8 +71,7 @@ namespace ApiTests.UnitTests
         public async Task ShouldAddToDoList()
         {
             //Arrange
-            var lists = CreateToDoLists();
-            var list = lists[0];
+            var list = CreateToDoList();
 
             //Act
             await repo.PostToDoList(list);
@@ -105,17 +104,15 @@ namespace ApiTests.UnitTests
         public async Task ShouldDeleteToDoList()
         {
             //Arrange
-            var lists = CreateToDoLists();
             int id = 1;
-            var listUp = lists[0];
-            context.ToDoLists.Find(id).Returns(listUp);
+            var listToDelete = CreateToDoList();
+            context.ToDoLists.FindAsync(id).Returns(listToDelete);
 
             //Act
             await repo.DeleteToDoList(id);
 
             //Assert
-            context.Received(2).ToDoLists.Find(id);
-            context.Received(1).ToDoLists.Remove(listUp);
+            context.ToDoLists.Received(1).Remove(listToDelete);
             await context.Received(1).SaveChangesAsync();
         }
 
@@ -151,18 +148,21 @@ namespace ApiTests.UnitTests
                 }
             };
         }
-
-        private static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
+        public static ToDoList CreateToDoList()
         {
-            var queryableList = sourceList.AsQueryable();
-            
-            var dbSet = new Moq.Mock<DbSet<T>>();
-            dbSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryableList.Provider);
-            dbSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryableList.Expression);
-            dbSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryableList.ElementType);
-            dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryableList.GetEnumerator());
-
-            return dbSet.Object;
+            return new ToDoList()
+            {
+                Name = "Shopping",
+                Id = 1,
+                ToDos = new List<ToDo>
+                {
+                    new ToDo
+                    {
+                        Description = "dummy",
+                        Id = 1
+                    }
+                }
+            };
         }
     }
 }
