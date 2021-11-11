@@ -30,7 +30,10 @@ namespace ToDoListeWeb.Controller
         public IActionResult GetAllLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
             var lists = toDoListRepo.FilterAndPageAllLists(queryParameters);
-            return Ok(lists);
+            if(lists!=null)
+                return Ok(lists);
+            else
+                return NotFound();
         }
 
         // Get all ToDos (Search by ID, Filter and Order possible)
@@ -38,7 +41,10 @@ namespace ToDoListeWeb.Controller
         public IActionResult GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
         {
             var toDos = toDoRepo.FilterAndPageAllToDos(queryParameters);
-            return Ok(toDos);
+            if(toDos!=null)
+                return Ok(toDos);
+            else
+                return NotFound();
         }
 
         // Get a specific ToDoList by ID
@@ -46,7 +52,10 @@ namespace ToDoListeWeb.Controller
         public async Task<IActionResult> GetToDoList(int id)
         {
             var toDoList = await toDoListRepo.GetSpecificList(id);
-            return Ok(toDoList);
+            if(toDoList!=null)
+                return Ok(toDoList);
+            else
+                return NotFound();
         }
 
         // Get a specific ToDo by ID
@@ -54,7 +63,10 @@ namespace ToDoListeWeb.Controller
         public async Task<IActionResult> GetToDo(int id)
         {
             var ToDo = await toDoRepo.GetSpecificToDo(id);
-            return Ok(ToDo);
+            if(ToDo!=null)
+                return Ok(ToDo);
+            else
+                return NotFound();
         }
 
         // Post a new ToDo

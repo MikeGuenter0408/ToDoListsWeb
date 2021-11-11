@@ -82,10 +82,10 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             return toDos;
         }
 
-        public async Task PostToDo(ToDo toDo)
+        public async Task<int> PostToDo(ToDo toDo)
         {
             context.Add(toDo);
-            await context.SaveChangesAsync();
+            return await context.SaveChangesAsync();
         }
 
         public async Task PutToDo(int id, ToDo toDo)

@@ -10,6 +10,7 @@ using ToDoListWeb.Infrastructure;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ToDoListeWeb;
 
 namespace ApiTests.IntegrationTest
 {
@@ -20,8 +21,7 @@ namespace ApiTests.IntegrationTest
         [SetUp]
         public void Setup()
         {
-            var appFactory = new WebApplicationFactory<ToDoListeWeb.Startup>()
-            .WithWebHostBuilder(builder=>
+            var appFactory = new WebApplicationFactory<Startup>().WithWebHostBuilder(builder=>
             {
                 builder.ConfigureServices(services =>
                 {
@@ -38,7 +38,7 @@ namespace ApiTests.IntegrationTest
         [Test]
         public async Task ShouldCarryOutGetRequest()
         {
-            //Arrange 
+            //Arrange
 
             //Act
             var response = await GetRequest<List<ToDoList>>("https://localhost:5001/v1.0/Todolists");
@@ -52,6 +52,7 @@ namespace ApiTests.IntegrationTest
         public async Task ShouldCarryOutPostRequest()
         {
             //Arrange 
+
             ToDoList newList = new ToDoList
             {
                 Name = "TestList",
