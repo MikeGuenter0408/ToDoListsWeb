@@ -28,7 +28,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet]
         public IActionResult GetAllToDoLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            var lists = toDoListRepo.FilterAndPageAllLists(queryParameters);
+            var lists = service.GetAllToDoLists(queryParameters);
             if(lists!=null)
                 return Ok(lists);
             else
@@ -39,7 +39,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet("ToDos")]
         public IActionResult GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
         {
-            var toDos = toDoRepo.FilterAndPageAllToDos(queryParameters);
+            var toDos = service.GetAllToDos(queryParameters);
             if(toDos!=null)
                 return Ok(toDos);
             else
@@ -50,7 +50,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet, Route("{id:int}")]
         public async Task<IActionResult> GetToDoList(int id)
         {
-            var toDoList = await toDoListRepo.GetSpecificList(id);
+            var toDoList = await service.GetToDoList(id);
             if(toDoList!=null)
                 return Ok(toDoList);
             else
@@ -61,7 +61,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet, Route("ToDos/{id:int}")]
         public async Task<IActionResult> GetToDo(int id)
         {
-            var ToDo = await toDoRepo.GetSpecificToDo(id);
+            var ToDo = await service.GetToDo(id);
             if(ToDo!=null)
                 return Ok(ToDo);
             else
@@ -72,16 +72,22 @@ namespace ToDoListeWeb.Controller
         [HttpPost("ToDos")]
         public async Task<IActionResult> PostToDo([FromBody]ToDo toDo)
         {
-            await service.PostToDo(toDo);
-            return CreatedAtAction("GetToDo", toDo, toDo);
+            int responseColumn = await service.PostToDo(toDo);
+            if(responseColumn!=0)
+                return CreatedAtAction("GetToDo", toDo, toDo);
+            else
+                return BadRequest();
         }
 
         // Post a new ToDoList
         [HttpPost]
         public async Task<IActionResult> PostToDoList([FromBody]ToDoList list)
         {
-            await service.PostToDoList(list);
-            return CreatedAtAction("GetToDoList", list, list);
+            int responseColumn = await service.PostToDoList(list);
+            if(responseColumn!=0)
+                return CreatedAtAction("GetToDoList", list, list);
+            else
+                return BadRequest();
         }
 
         [HttpPut("{id:int}")]

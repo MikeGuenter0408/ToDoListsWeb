@@ -10,7 +10,7 @@ namespace ToDoListWeb.Domain.Interfaces
     {
         List<ToDoList> FilterAndPageAllLists(ToDoListQueryParameters queryParameters);
         Task<ToDoList> GetSpecificList(int id);
-        Task PostToDoList(ToDoList list);
+        Task<int> PostToDoList(ToDoList list);
         Task PutToDoList(int id, ToDoList list);
         Task<ToDoList> DeleteToDoList(int id);
     }

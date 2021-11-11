@@ -37,10 +37,10 @@ namespace ToDoListeWeb.Infrastructure.Repositories
             return  await lists.SingleOrDefaultAsync(x=>x.Id==id);
         }
 
-        public async Task PostToDoList(ToDoList list)
+        public async Task<int> PostToDoList(ToDoList list)
         {
             context.Add(list);
-            await context.SaveChangesAsync();
+            return await context.SaveChangesAsync();
         }
 
         public async Task PutToDoList(int id, ToDoList list)

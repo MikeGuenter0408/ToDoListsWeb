@@ -34,13 +34,13 @@ namespace ToDoListWeb.Domain.Service
         {
             return await toDoRepo.GetSpecificToDo(id);
         }
-        public async Task PostToDoList(ToDoList toDoList)
+        public async Task<int> PostToDoList(ToDoList toDoList)
         {
-            await toDoListRepo.PostToDoList(toDoList);
+            return await toDoListRepo.PostToDoList(toDoList);
         }
-        public async Task PostToDo(ToDo toDo)
+        public async Task<int> PostToDo(ToDo toDo)
         {
-            await toDoRepo.PostToDo(toDo);
+            return await toDoRepo.PostToDo(toDo);
         }
         public async Task PutToDoList(int id, ToDoList toDoList)
         {
