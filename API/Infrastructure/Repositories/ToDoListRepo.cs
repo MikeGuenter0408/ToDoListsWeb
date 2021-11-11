@@ -5,10 +5,11 @@ using ToDoListeWeb.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoListWeb.Infrastructure;
+using ToDoListWeb.Domain.Interfaces;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
-    public class ToDoListRepo
+    public class ToDoListRepo : IToDoListRepo
     {
         private IToDoListWebContext context; 
         public ToDoListRepo(IToDoListWebContext context)
