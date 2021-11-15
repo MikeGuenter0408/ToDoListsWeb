@@ -2,38 +2,19 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using ToDoListeWeb.Domain.Entities;
-using ToDoListWeb.Infrastructure;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using ToDoListeWeb;
 
 namespace ApiTests.IntegrationTest
 {
     public class ToDoListControllerTest : IntegrationTest
     {
-        private HttpClient _client;
-
         [SetUp]
         public void Setup()
         {
-            var appFactory = new WebApplicationFactory<Startup>().WithWebHostBuilder(builder=>
-            {
-                builder.ConfigureServices(services =>
-                {
-                    var descriptor  = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ToDoListWebContext>));
-                    if (descriptor  != null)
-                    {
-                        services.Remove(descriptor );
-                        services.AddDbContext<ToDoListWebContext>(options => options.UseInMemoryDatabase("TestDB"));
-                    }
-                });
-            });
-            _client = appFactory.CreateClient();
+            base.Setup();
         }
         [Test]
         public async Task ShouldCarryOutGetRequest()
