@@ -43,7 +43,7 @@ namespace ApiTests.UnitTests
             var lists = repo.FilterAndPageAllLists(parameters);
         
             //Assert
-            Assert.That(lists[0].Name == "Series");
+            Assert.That(lists[0].Name == "Shopping");
         }
 
         

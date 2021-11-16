@@ -5,6 +5,7 @@ using ToDoListeWeb.Infrastructure.Repositories;
 using ToDoListeWeb.Infrastructure.QueryParameters;
 using ToDoListWeb.Infrastructure;
 using ToDoListWeb.Domain.Service;
+using ToDoListWeb.Domain.Interfaces;
 
 namespace ToDoListeWeb.Controller
 {
@@ -14,21 +15,18 @@ namespace ToDoListeWeb.Controller
     [ApiController]
     public class ToDoListsV1_Controller : ControllerBase
     {
-        private Service service;
+        private readonly IService _service;
         
-        public ToDoListsV1_Controller(ToDoListWebContext context)
+        public ToDoListsV1_Controller(IService service)
         {
-            context.Database.EnsureCreated();
-            ToDoRepo tdRepo = new ToDoRepo(context);
-            ToDoListRepo tdlRepo = new ToDoListRepo(context);
-            service = new Service(tdlRepo, tdRepo);
+            _service = service;
         }
 
         // Get all ToDoLists
         [HttpGet]
         public IActionResult GetAllToDoLists([FromQuery]ToDoListQueryParameters queryParameters)
         {
-            var lists = service.GetAllToDoLists(queryParameters);
+            var lists = _service.GetAllToDoLists(queryParameters);
             if(lists!=null)
                 return Ok(lists);
             else
@@ -39,7 +37,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet("ToDos")]
         public IActionResult GetAllToDos([FromQuery] ToDoQueryParameters queryParameters)
         {
-            var toDos = service.GetAllToDos(queryParameters);
+            var toDos = _service.GetAllToDos(queryParameters);
             if(toDos!=null)
                 return Ok(toDos);
             else
@@ -50,7 +48,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet, Route("{id:int}")]
         public async Task<IActionResult> GetToDoList(int id)
         {
-            var toDoList = await service.GetToDoList(id);
+            var toDoList = await _service.GetToDoList(id);
             if(toDoList!=null)
                 return Ok(toDoList);
             else
@@ -61,7 +59,7 @@ namespace ToDoListeWeb.Controller
         [HttpGet, Route("ToDos/{id:int}")]
         public async Task<IActionResult> GetToDo(int id)
         {
-            var ToDo = await service.GetToDo(id);
+            var ToDo = await _service.GetToDo(id);
             if(ToDo!=null)
                 return Ok(ToDo);
             else
@@ -72,7 +70,7 @@ namespace ToDoListeWeb.Controller
         [HttpPost("ToDos")]
         public async Task<IActionResult> PostToDo([FromBody]ToDo toDo)
         {
-            int responseColumn = await service.PostToDo(toDo);
+            int responseColumn = await _service.PostToDo(toDo);
             if(responseColumn!=0)
                 return CreatedAtAction("GetToDo", toDo, toDo);
             else
@@ -83,7 +81,7 @@ namespace ToDoListeWeb.Controller
         [HttpPost]
         public async Task<IActionResult> PostToDoList([FromBody]ToDoList list)
         {
-            int responseColumn = await service.PostToDoList(list);
+            int responseColumn = await _service.PostToDoList(list);
             if(responseColumn!=0)
                 return CreatedAtAction("GetToDoList", list, list);
             else
@@ -93,28 +91,28 @@ namespace ToDoListeWeb.Controller
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutToDoList([FromRoute] int id, [FromBody] ToDoList list)
         {
-            await service.PutToDoList(id, list);
+            await _service.PutToDoList(id, list);
             return NoContent();
         }
 
         [HttpPut("ToDos/{id:int}")]
         public async Task<IActionResult> PutToDo([FromRoute] int id, [FromBody] ToDo toDo)
         {
-            await service.PutToDo(id, toDo);
+            await _service.PutToDo(id, toDo);
             return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteToDoList([FromRoute] int id)
         {
-            var list = await service.DeleteToDoList(id);
+            var list = await _service.DeleteToDoList(id);
             return Ok(list);
         }
 
         [HttpDelete("ToDos/{id:int}")]
         public async Task<IActionResult> DeleteToDo([FromRoute] int id)
         {
-            var toDo = await service.DeleteToDo(id);
+            var toDo = await _service.DeleteToDo(id);
             return Ok(toDo);
         }
     }

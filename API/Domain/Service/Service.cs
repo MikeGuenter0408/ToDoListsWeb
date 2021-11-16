@@ -7,7 +7,7 @@ using ToDoListWeb.Domain.Interfaces;
 
 namespace ToDoListWeb.Domain.Service
 {
-    public class Service
+    public class Service : IService
     {
         private IToDoRepo toDoRepo;
         private IToDoListRepo toDoListRepo;

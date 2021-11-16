@@ -6,6 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ToDoListWeb.Infrastructure;
+using ToDoListWeb.Domain.Interfaces;
+using ToDoListWeb.Domain.Service;
+using ToDoListeWeb.Infrastructure.Repositories;
 
 namespace ToDoListeWeb
 {
@@ -21,7 +24,7 @@ namespace ToDoListeWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ToDoListWebContext>(options =>
+            services.AddDbContext<IToDoListWebContext ,ToDoListWebContext>(options =>
             options.UseInMemoryDatabase("Mike's ToDo-Listenmanager"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -35,6 +38,9 @@ namespace ToDoListeWeb
                 //options.ApiVersionReader                             // --> For HTTP Versioning
                 //= new HeaderApiVersionReader("X-Api-Version");
             });
+            services.AddScoped<IToDoRepo, ToDoRepo>();
+            services.AddScoped<IToDoListRepo, ToDoListRepo>();
+            services.AddScoped<IService, Service>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

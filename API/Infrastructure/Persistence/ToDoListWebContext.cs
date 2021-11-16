@@ -9,6 +9,7 @@ namespace ToDoListWeb.Infrastructure
     {
         public ToDoListWebContext(DbContextOptions<ToDoListWebContext> options) : base(options)  
         {
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
