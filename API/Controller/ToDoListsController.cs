@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListeWeb.Domain.Entities;
-using ToDoListeWeb.Infrastructure.Repositories;
 using ToDoListeWeb.Infrastructure.QueryParameters;
-using ToDoListWeb.Infrastructure;
-using ToDoListWeb.Domain.Service;
 using ToDoListWeb.Domain.Interfaces;
 
 namespace ToDoListeWeb.Controller

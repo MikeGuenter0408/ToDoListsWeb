@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoListeWeb.Domain.Entities;
 using ToDoListeWeb.Infrastructure.QueryParameters;
-using ToDoListWeb.Infrastructure;
 
 namespace ToDoListWeb.Domain.Interfaces
 {
