@@ -26,8 +26,12 @@ namespace ApiTests.IntegrationTest
             
             //Assert
             Assert.That(response.Count, Is.EqualTo(5));
-            Assert.That(response[0].Name, Is.EqualTo("Shopping"));
-            Assert.That(response[0].ToDos[0].Description, Is.EqualTo("Cabbage"));
+            Assert.That(response.Any(p => p.Name=="Shopping"), Is.True);
+            if(response.Any(p => p.Name=="Shopping"))
+            {
+                ToDoList list = response.Find(p=>p.Name=="Shopping");
+                Assert.That(list.ToDos.Any(p=>p.Description=="Garlic"), Is.True);
+            }
         }
         [Test]
         public async Task ShouldCarryOutPostRequest()

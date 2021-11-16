@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoListWeb.Infrastructure;
 using ToDoListWeb.Domain.Interfaces;
+using ToDoListeWeb.Infrastructure.Extensions;
 
 namespace ToDoListeWeb.Infrastructure.Repositories
 {
@@ -19,13 +20,29 @@ namespace ToDoListeWeb.Infrastructure.Repositories
         public List<ToDoList> FilterAndPageAllLists(ToDoListQueryParameters queryParameters)
         {
             IQueryable<ToDoList> lists = context.ToDoLists.Include(x => x.ToDos);
-            
-            if(queryParameters.Name!=null)
-                lists = lists
-                .Where(x=>x.Name.Equals(queryParameters.Name));
 
+            // Order lists
+            if(queryParameters.SortBy!=null && queryParameters.SortOrder!=null)
+            {
+                if(queryParameters.SortOrder == "asc")
+                {
+                    if(typeof(ToDoList).GetProperty(queryParameters.SortBy)!= null)
+                    {
+                        lists = lists.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
+                    }
+                }
+                else
+                {
+                    if(typeof(ToDoList).GetProperty(queryParameters.SortBy)!= null)
+                    {
+                        lists = lists.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
+                    }
+                }
+            }
+
+            // paginate lists
             lists = lists
-            .Skip(queryParameters.SiteSize * (queryParameters.Page -1))
+            .Skip(queryParameters.SiteSize * (queryParameters.Page - 1))
             .Take(queryParameters.SiteSize);
 
             return lists.ToList();
